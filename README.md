@@ -1,3 +1,14 @@
+---
+title: Linkedin Automation
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+sdk_version: 4.44.0
+app_file: app.py
+pinned: false
+---
+
 # 1. PROJECT TITLE
 
 # CareerOS: When Student Skills Meet the Right Opportunities
