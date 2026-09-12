@@ -1,0 +1,21 @@
+VIVEK BOGAVALLI
+    Email: vivek@careeros.ai
+
+    SUMMARY
+    Senior AI engineer specialized in LLM agents and verifiable claim lineage.
+
+    SKILLS
+    Python, TypeScript, FastAPI, React, SQL, PyMuPDF
+
+    WORK EXPERIENCE
+    Antigravity AI (2023 - Present)
+    - Architected autonomous multi-agent pipelines with LangGraph and FastAPI
+    - Reduced job discovery latency by 45% through pgvector HNSW indexing
+
+    PROJECTS
+    CareerOS Platform
+    - Built a RAG chatbot using LangGraph
+    - Designed deterministic verification system
+
+    EDUCATION
+    BS in Computer Science, 2021
