@@ -538,6 +538,15 @@ export async function getPendingPresencePosts() {
   }
 }
 
+export async function getApprovedPresencePosts() {
+  try {
+    return await request('/presence/posts?status=APPROVED');
+  } catch (err) {
+    console.error('Failed to get approved presence posts:', err);
+    return [];
+  }
+}
+
 export async function runAgent4(memoryId, profileId) {
   try {
     return await request(`/presence/draft-from-memory?memory_id=${memoryId}&profile_id=${profileId}`, {

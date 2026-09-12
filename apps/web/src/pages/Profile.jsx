@@ -17,7 +17,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { Avatar, AvatarFallback } from '../components/ui/Avatar';
-import { getProfile, getAuthToken } from '../services/api';
+import { getProfile, getAuthToken, getApprovedPresencePosts } from '../services/api';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -31,6 +31,7 @@ export function ProfilePage() {
   const [editingTargetRoles, setEditingTargetRoles] = useState(false);
   const [newRoleInput, setNewRoleInput] = useState("");
   const [savingRoles, setSavingRoles] = useState(false);
+  const [presencePosts, setPresencePosts] = useState([]);
 
   async function loadProfile() {
     setLoading(true);
@@ -40,6 +41,9 @@ export function ProfilePage() {
       if (data && data.target_roles) {
         setNewRoleInput(data.target_roles.join(", "));
       }
+      
+      const posts = await getApprovedPresencePosts();
+      setPresencePosts(posts);
     } catch (err) {
       console.error("Failed to load profile:", err);
     }
@@ -392,9 +396,52 @@ export function ProfilePage() {
             </div>
           )}
 
-        </div>
+        {/* Recent Activity / Posts Section */}
+        {presencePosts && presencePosts.length > 0 && (
+          <div className="bg-white border border-[#ebebeb] shadow-[0_1px_2px_rgba(0,0,0,0.08)] rounded-lg p-6 relative mt-4">
+            <div className="flex justify-between items-start mb-6">
+              <h2 className="text-xl font-semibold text-black">Recent Activity</h2>
+            </div>
+            
+            <div className="space-y-6">
+              {presencePosts.map((post, index) => (
+                <div key={post.id} className={`flex flex-col gap-4 ${index !== presencePosts.length - 1 ? 'pb-6 border-b border-[#ebebeb]' : ''}`}>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-base font-semibold text-black">{post.title}</h3>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Posted by Presence Agent • {new Date(post.updated_at || post.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-800 whitespace-pre-wrap">{post.content_body}</p>
+                  
+                  {post.image_url && (
+                    <div className="w-full mt-2 rounded-lg overflow-hidden border border-gray-200">
+                      <img src={post.image_url} alt={post.title} className="w-full h-auto object-cover max-h-[400px]" />
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center gap-4 text-gray-500 text-sm font-semibold mt-2">
+                    <button className="flex items-center gap-1.5 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                      Like
+                    </button>
+                    <button className="flex items-center gap-1.5 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                      Comment
+                    </button>
+                    <button className="flex items-center gap-1.5 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                      Share
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
-        {/* Right Column (25%) */}
+      {/* Right Column (25%) */}
+
         <div className="hidden lg:block lg:w-[25%] space-y-4">
           
           {/* Agent Policies (OS Specific) */}
