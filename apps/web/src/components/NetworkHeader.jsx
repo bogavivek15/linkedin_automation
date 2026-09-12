@@ -71,8 +71,8 @@ export function NetworkHeader({ currentTab, onSelectTab }) {
           </div>
         </div>
 
-        {/* Center/Right: Primary Nav Items */}
-        <nav className="flex items-center h-full">
+          {/* Center/Right: Primary Nav Items */}
+        <nav className="flex items-center h-full overflow-x-auto no-scrollbar">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
@@ -82,7 +82,7 @@ export function NetworkHeader({ currentTab, onSelectTab }) {
                 key={item.id}
                 onClick={() => onSelectTab(item.id)}
                 className={cn(
-                  "relative flex flex-col items-center justify-center h-full px-4 sm:px-5 min-w-[80px] text-xs transition-colors border-b-2",
+                  "relative flex flex-col items-center justify-center h-full px-2 sm:px-5 min-w-[48px] sm:min-w-[80px] text-xs transition-colors border-b-2",
                   isActive
                     ? "border-black text-black"
                     : "border-transparent text-gray-500 hover:text-black",
@@ -118,10 +118,10 @@ export function NetworkHeader({ currentTab, onSelectTab }) {
           })}
 
           {/* Profile & Contextual Intelligence Menu */}
-          <div className="relative h-full flex items-center border-l border-[#ebebeb] pl-2 ml-2">
+          <div className="relative h-full flex items-center border-l border-[#ebebeb] pl-2 ml-2 shrink-0">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex flex-col items-center justify-center h-full px-2 min-w-[80px] text-gray-500 hover:text-black transition-colors focus:outline-none"
+              className="flex flex-col items-center justify-center h-full px-2 min-w-[48px] sm:min-w-[80px] text-gray-500 hover:text-black transition-colors focus:outline-none"
             >
               <Avatar className="h-6 w-6">
                 <AvatarFallback className="bg-gray-200 text-gray-700 text-xs font-bold">{initials}</AvatarFallback>

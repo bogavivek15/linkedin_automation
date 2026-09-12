@@ -90,15 +90,6 @@ async def cancel_run(
     return {"success": True, "data": {"cancelled": True}}
 
 
-@router.get("/{agent_name}", response_model=dict)
-async def get_agent(agent_name: str):
-    """
-    Get specific agent details.
-    """
-    agent = await _service.get_agent(agent_name)
-    if not agent:
-        raise HTTPException(status_code=404, detail="Agent not found")
-    return {"success": True, "data": agent.model_dump(mode="json")}
 
 
 class Agent1Request(BaseModel):
@@ -173,3 +164,13 @@ async def approve_content(
     if not post:
         raise HTTPException(status_code=404, detail="Approval request not found or already processed")
     return {"success": True, "data": post}
+
+@router.get("/{agent_name}", response_model=dict)
+async def get_agent(agent_name: str):
+    """
+    Get specific agent details.
+    """
+    agent = await _service.get_agent(agent_name)
+    if not agent:
+        raise HTTPException(status_code=404, detail="Agent not found")
+    return {"success": True, "data": agent.model_dump(mode="json")}

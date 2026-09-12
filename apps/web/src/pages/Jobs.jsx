@@ -183,10 +183,10 @@ export function JobsPage() {
       </div>
 
       {/* Two-Column Split Layout */}
-      <div className="flex flex-col lg:flex-row gap-4 h-[calc(100vh-220px)] min-h-[640px]">
+      <div className="flex flex-col lg:flex-row gap-4 lg:h-[calc(100vh-220px)] lg:min-h-[640px]">
         
         {/* Left Column: Job Cards List (40%) */}
-        <div className="lg:w-[40%] bg-white border border-[#ebebeb] shadow-[0_1px_2px_rgba(0,0,0,0.08)] rounded-lg flex flex-col overflow-hidden">
+        <div className="lg:w-[40%] h-[400px] lg:h-auto bg-white border border-[#ebebeb] shadow-[0_1px_2px_rgba(0,0,0,0.08)] rounded-lg flex flex-col overflow-hidden">
           <div className="p-4 border-b border-[#ebebeb] flex justify-between items-center bg-gray-50/50">
             <div>
               <h2 className="text-base font-semibold text-black">Jobs based on your profile</h2>

@@ -680,7 +680,7 @@ export function CommandCenterPage() {
                       
                       <div className="flex gap-2 pt-2">
                         <button 
-                          onClick={() => handleApprovePost(post.id)}
+                          onClick={() => handleApprovePost(post)}
                           className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-semibold rounded hover:bg-indigo-700 transition-colors"
                         >
                           Approve & Publish to Sandbox
