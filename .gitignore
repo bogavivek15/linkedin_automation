@@ -59,3 +59,4 @@ htmlcov/
 *.egg-info/
 tree.txt
 filtered_tree.txt
+apps/web/dist/
