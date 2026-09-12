@@ -230,14 +230,84 @@ class OllamaEmbeddingProvider(EmbeddingProvider):
         return vectors
 
 
+class GeminiEmbeddingProvider(EmbeddingProvider):
+    """
+    Serverless-friendly embedding provider using Google Gemini text-embedding-004.
+    Perfect for Vercel deployments where local Ollama is unavailable.
+    """
+    def __init__(self, model_name: str = "text-embedding-004", dimensions: int = 768):
+        self._model_name = model_name
+        self._dimensions = dimensions
+        
+        try:
+            from google import genai
+            self.client = genai.Client(api_key=settings.gemini_api_key)
+        except Exception as e:
+            logger.error(f"Failed to initialize Gemini embedding client: {e}")
+            self.client = None
+
+    @property
+    def model_name(self) -> str:
+        return self._model_name
+
+    @property
+    def dimensions(self) -> int:
+        return self._dimensions
+
+    async def embed(self, text: str) -> list[float]:
+        if not self.client:
+            raise CareerOSError(code="EMBEDDING_PROVIDER_UNAVAILABLE", message="Gemini client not initialized", status_code=503)
+        if not text or not text.strip():
+            raise CareerOSError(code="EMBEDDING_INVALID_VECTOR", message="Cannot embed empty text", status_code=400)
+            
+        try:
+            # We must use asyncio.to_thread because the genai client might be synchronous
+            import asyncio
+            response = await asyncio.to_thread(
+                self.client.models.embed_content,
+                model=self._model_name,
+                contents=text
+            )
+            raw_vec = response.embeddings[0].values
+            return validate_vector(raw_vec, self._dimensions)
+        except Exception as e:
+            logger.error(f"Gemini embedding failed: {e}")
+            raise CareerOSError(code="EMBEDDING_FAILED", message=str(e), status_code=500)
+
+    async def embed_batch(self, texts: list[str]) -> list[list[float]]:
+        if not self.client:
+            raise CareerOSError(code="EMBEDDING_PROVIDER_UNAVAILABLE", message="Gemini client not initialized", status_code=503)
+            
+        cleaned = [t.strip() for t in texts if t and t.strip()]
+        if not cleaned:
+            return []
+            
+        try:
+            import asyncio
+            response = await asyncio.to_thread(
+                self.client.models.embed_content,
+                model=self._model_name,
+                contents=cleaned
+            )
+            return [validate_vector(emb.values, self._dimensions) for emb in response.embeddings]
+        except Exception as e:
+            logger.error(f"Gemini batch embedding failed: {e}")
+            raise CareerOSError(code="EMBEDDING_FAILED", message=str(e), status_code=500)
+
+
 def get_embedding_provider(force_mock: bool = False) -> EmbeddingProvider:
     """
     Factory returning the active embedding provider.
-    Uses MockEmbeddingProvider in test/demo environments or when explicitly requested.
+    Uses Gemini in production (Vercel) since Ollama is local-only.
     """
     if force_mock or settings.app_env == "test" or settings.demo_mode:
         return MockEmbeddingProvider(
             model_name=settings.ollama_embedding_model,
             dimensions=settings.embedding_dimensions,
         )
+    
+    # If we have a Gemini API key, use Gemini for serverless embedding
+    if settings.gemini_api_key:
+        return GeminiEmbeddingProvider()
+        
     return OllamaEmbeddingProvider()
