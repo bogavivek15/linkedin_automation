@@ -57,3 +57,5 @@ ENV/
 .coverage
 htmlcov/
 *.egg-info/
+tree.txt
+filtered_tree.txt
