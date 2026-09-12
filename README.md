@@ -3,9 +3,7 @@ title: Linkedin Automation
 emoji: 🚀
 colorFrom: blue
 colorTo: indigo
-sdk: gradio
-sdk_version: 5.17.0
-app_file: app.py
+sdk: docker
 pinned: false
 ---
 

@@ -21,3 +21,9 @@ demo = gr.Interface(
 
 # Mount the Gradio app at /ui, leaving the root (/) and /api/* for FastAPI
 app = gr.mount_gradio_app(fastapi_app, demo, path="/ui")
+
+if __name__ == "__main__":
+    import uvicorn
+    # Hugging Face sets the PORT environment variable (default 7860)
+    port = int(os.environ.get("PORT", 7860))
+    uvicorn.run(app, host="0.0.0.0", port=port)
