@@ -3,8 +3,9 @@ title: Linkedin Automation
 emoji: 🚀
 colorFrom: blue
 colorTo: indigo
-sdk: docker
-pinned: false
+sdk: gradio
+sdk_version: 5.17.0
+app_file: app.py
 ---
 
 # 1. PROJECT TITLE
